@@ -1,0 +1,40 @@
+<resources>
+    <!--todo Group and add missing strings @Egor-->
+
+    <string name="app_name">Vlogmi</string>
+    <string name="facebook_app_id">1109648499100380</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="signIn">Sign in</string>
+    <string name="domain">52.49.111.143</string>
+    <string name="context">live</string>
+    <integer name="port">8554</integer>
+    <string name="stream1">stream1</string>
+    <string name="stream2">red5prostream</string>
+    <integer name="bitrate">750</integer>
+    <integer name="highBitrate">1000</integer>
+    <bool name="debugView">false</bool>
+
+    <plurals name="numberOfLikes">
+        <item quantity="one">%d like</item>
+        <item quantity="other">%d likes</item>
+    </plurals>
+    <string name="zeroNumberOfLikes">No likes</string>
+
+    <string name="enter_comment_hint">Enter comment</string>
+    <string name="comment_title">Comments</string>
+    <string name="error_bg">error load bg</string>
+    <string name="season_winter">winter</string>
+
+    <!--=========================================================================================-->
+    <!--CAMERA SCREEN-->
+    <!--=========================================================================================-->
+    <string name="permission_message_camera_and_storage">Allow camera and storage permissions to record video</string>
+    <string name="permission_message_camera">Allow camera permission to record video</string>
+    <string name="permission_message_storage">Allow storage permission to save video</string>
+    <string name="audio_permission_denied">Video will be recorded without audio</string>
+    <string name="button_allow_title">Allow</string>
+    <string name="button_settings_title">Settings</string>
+            <!--PREPARE POST-->
+    <string name="prepare_post_hint">Add caption</string>
+</resources>

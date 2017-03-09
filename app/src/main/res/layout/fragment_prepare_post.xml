@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+
+    <com.task.vasskob.dragableframelayout.DraggableFrameLayout
+        android:id="@+id/dfl_filter_container"
+        android:layout_width="@dimen/filter_container_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        custom:orientation="horizontal"
+        >
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="250dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="start"/>
+
+        <com.task.vasskob.dragableframelayout.IncreasingRecyclerView
+            android:id="@+id/choose_filter_view"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_marginStart="70dp"
+            />
+
+        <com.task.vasskob.dragableframelayout.CircularView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="68dp"
+            />
+    </com.task.vasskob.dragableframelayout.DraggableFrameLayout>
+
+    <EditText
+        android:id="@+id/tv_post_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_post"
+        android:background="@drawable/auth_edit_text_background"
+        android:gravity="center"
+        android:inputType="textNoSuggestions"
+        android:hint="@string/prepare_post_hint"
+        android:textColor="@color/appColorPrimary"
+        android:textColorHint="@color/colorWhite"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:textSize="14sp"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/transparent"
+        android:padding="10dp"
+        android:src="@drawable/button_share_selector"
+        android:textColor="@color/colorTextAuth"
+        android:textSize="14sp"/>
+
+
+    <ImageView
+        android:id="@+id/btn_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_cancel"
+        />
+
+</RelativeLayout>

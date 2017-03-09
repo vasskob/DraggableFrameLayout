@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary"      >#FFFC5A5B</color>
+    <color name="colorPrimaryDark"  >#FFFC5A5B</color>
+    <color name="colorAccent"       >#FFFC5A5B</color>
+
+    <color name="colorBackgroundAuthEditText">#33121212</color>
+    <color name="colorBorderAuthEditText">#64121212</color>
+    <color name="colorHintText">#7dffffff</color>
+
+    <color name="colorTextAuth">#ffffff</color>
+
+    <color name="colorBackgroundForgotPassword">#ffffff</color>
+    <color name="colorActionBarForgotPassword">#33121212</color>
+    <color name="colorTextForgotPassword">#000000</color>
+    <color name="appColorPrimary">#FFFC5A5B</color>
+    <color name="appColorPrimaryDark">#FFFC5A5B</color>
+
+    <color name="colorPostData">#4794d7</color>
+    <color name="colorLoginButton">#FFFC5A5B</color>
+    <color name="colorFacebookButton">#FF2A61FD</color>
+    <color name="apptheme_color">#a0ffffff</color>
+    <color name="colorPostUsername">#FF404040</color>
+    <color name="colorGrayText">#595959</color>
+    <color name="cameraTypeBG">#a0181818</color>
+    <color name="followingButton">#FFFC5A5B</color>
+    <color name="followingPressedButton">#9e3d3f</color>
+    <color name="invisible">#80000000</color>
+    <color name="cropImageBG">#78121212</color>
+    <color name="hint_foreground_material_light">#000000</color>
+    <color name="hint_foreground_material_dark">#000000</color>
+    <color name="bb_darkBackgroundColor">#000000</color>
+    <color name="color_gray_icon_border">#bababa</color>
+    <color name="color_calendar_posts_text">#4d4c4c</color>
+    <color name="color_timer_background">#96545454</color>
+    <color name="camera_bar_color">#6e0f1725</color>
+
+    <color name="colorGray">#d1d1d1</color>
+    <color name="colorWhite">#ffffff</color>
+
+    <color name="camera_shoot_bg"       >#55ffffff</color>
+    <color name="camera_border_color"   >#960f1725</color>
+
+</resources>
