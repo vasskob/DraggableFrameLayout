@@ -3,6 +3,7 @@
     <color name="colorPrimary"      >#FFFC5A5B</color>
     <color name="colorPrimaryDark"  >#FFFC5A5B</color>
     <color name="colorAccent"       >#FFFC5A5B</color>
+    <color name="myColor"       >#FF7043</color>
 
     <color name="colorBackgroundAuthEditText">#33121212</color>
     <color name="colorBorderAuthEditText">#64121212</color>

@@ -4,7 +4,7 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimaryDark">
 
 
     <com.task.vasskob.dragableframelayout.DraggableFrameLayout
@@ -19,9 +19,9 @@
         <FrameLayout
             android:layout_width="70dp"
             android:layout_height="250dp"
+            android:layout_gravity="start"
             android:clickable="true"
-            android:focusable="true"
-            android:layout_gravity="start"/>
+            android:focusable="true"/>
 
         <com.task.vasskob.dragableframelayout.IncreasingRecyclerView
             android:id="@+id/choose_filter_view"
@@ -45,12 +45,12 @@
         android:layout_above="@+id/btn_post"
         android:background="@drawable/auth_edit_text_background"
         android:gravity="center"
-        android:inputType="textNoSuggestions"
         android:hint="@string/prepare_post_hint"
-        android:textColor="@color/appColorPrimary"
-        android:textColorHint="@color/colorWhite"
+        android:inputType="textNoSuggestions"
         android:maxLines="1"
         android:padding="10dp"
+        android:textColor="@color/appColorPrimary"
+        android:textColorHint="@color/colorWhite"
         android:textSize="14sp"
         />
 

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:custom="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/myColor"
+
+    >
+
+    <com.task.vasskob.dragableframelayout.DraggableFrameLayout
+        android:id="@+id/dfl_filter_container"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/filter_container_width"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        custom:orientation="vertical"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <com.task.vasskob.dragableframelayout.IncreasingRecyclerView
+            android:id="@+id/choose_filter_view"
+            android:layout_width="250dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <com.task.vasskob.dragableframelayout.CircularView
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+
+            />
+
+    </com.task.vasskob.dragableframelayout.DraggableFrameLayout>
+
+</RelativeLayout>

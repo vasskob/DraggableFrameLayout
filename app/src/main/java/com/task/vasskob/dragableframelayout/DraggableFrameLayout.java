@@ -13,9 +13,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-/**
- * Created by User on 06.03.2017.
- */
 
 public class DraggableFrameLayout extends FrameLayout {
     private static final String TAG = DraggableFrameLayout.class.getSimpleName();
@@ -28,11 +25,12 @@ public class DraggableFrameLayout extends FrameLayout {
     private static final int sMARGIN_ANIM_DURATION = 225;
     private static final int sUPPER_MARGIN_LIMIT = 0;
     private static final int sLIST_COUNT = 2;
-    private static final String DEFAULT_ORIENTATION = "horizontal";
+    private static final String ORIENTATION_HORIZONTAL = "horizontal";
+    private static final String ORIENTATION_WRONG_VALUE_WARN = "Orientation must be horizontal or vertical";
+    public static final String ORIENTATION_VERTICAL = "vertical";
     private String viewOrientation;
-    private Context mContext;
 
-    private boolean mIsScrolling;
+
     private boolean mTouch;
     private boolean mConsumeTouch;
 
@@ -42,22 +40,22 @@ public class DraggableFrameLayout extends FrameLayout {
     private float mPrevRawY;
 
     private float mDistanceX;
+    private float mDistanceY;
 
     private int mEndMarginLimit;
 
-    private int mListWidth;
     private int mMarginLimits[];
 
     private boolean isDraggable = true;
     private ValueAnimator mMarginAnimator;
 
     private int mTouchSlop;
-    private int mMinFlingVelocity;
+    private boolean horizontalOrientation;
 
 
     public DraggableFrameLayout(Context context) {
         super(context);
-        viewOrientation = DEFAULT_ORIENTATION;
+        viewOrientation = ORIENTATION_HORIZONTAL;
         init(context);
     }
 
@@ -66,11 +64,14 @@ public class DraggableFrameLayout extends FrameLayout {
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.DraggableFrameLayout, 0, 0);
         try {
-            viewOrientation = a.getString(R.styleable.DraggableFrameLayout_orientation);
-            init(context);
+            if (a.getString(R.styleable.DraggableFrameLayout_orientation) != null) {
+                setViewOrientation(a.getString(R.styleable.DraggableFrameLayout_orientation));
+            } else
+                setViewOrientation(ORIENTATION_HORIZONTAL);
         } finally {
             a.recycle();
         }
+        init(context);
     }
 
     public DraggableFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -82,11 +83,13 @@ public class DraggableFrameLayout extends FrameLayout {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         /**mLowerBottomMarginLimit = (getHeight() / sLIST_COUNT) * 2;*/
-        mEndMarginLimit = getWidth() / sLIST_COUNT;
+        if (horizontalOrientation) {
+            mEndMarginLimit = getWidth() / sLIST_COUNT;
+        } else {
+            mEndMarginLimit = getHeight() / sLIST_COUNT;
+        }
         mEndMarginLimit *= -1;
-
-        mListWidth = getWidth() / sLIST_COUNT;
-
+        int mListWidth = getWidth() / sLIST_COUNT;
         mMarginLimits = new int[sLIST_COUNT];/* {sUPPER_MARGIN_LIMIT, mLowerBottomMarginLimit / 2, mLowerBottomMarginLimit};*/
         for (int i = sLIST_COUNT - 1; i >= 0; i--) {
             if (i == 0) {
@@ -107,7 +110,11 @@ public class DraggableFrameLayout extends FrameLayout {
                 mPrevRawX = ev.getRawX();
                 mPrevRawY = ev.getRawY();
                 RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
-                mLastEndMargin = layoutParams.rightMargin;
+                if (horizontalOrientation) {
+                    mLastEndMargin = layoutParams.rightMargin;
+                } else {
+                    mLastEndMargin = layoutParams.topMargin;
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.d(TAG, "onInterceptTouchEvent: ACTION_MOVE");
@@ -133,7 +140,12 @@ public class DraggableFrameLayout extends FrameLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.d(TAG, "onTouchEvent: ");
-                return dragContainer(layoutParams, event.getRawX());
+                if (horizontalOrientation) {
+                    return dragContainer(layoutParams, event.getRawX());
+                } else {
+                    return dragContainer(layoutParams, event.getRawY());
+                }
+
             case MotionEvent.ACTION_UP:
                 mTouch = false;
                 animateOnActionUp(layoutParams);
@@ -146,8 +158,8 @@ public class DraggableFrameLayout extends FrameLayout {
      * if vertical scroll handle itself -> true
      * if horizontal scroll pass to children -> false
      *
-     * @param ev
-     * @return
+     * @param ev motion event of touch
+     * @return swipe orientation, vertical=1, horizontal=0
      */
     private boolean handleTouch(MotionEvent ev) {
         boolean result;
@@ -156,19 +168,34 @@ public class DraggableFrameLayout extends FrameLayout {
 
         result = (distanceY <= distanceX) && (mTouchSlop < distanceX);
         Log.d(TAG, "handleTouch: result: " + result + " mPrevTouchY: " + mPrevRawX);
-        return result;
+        if (horizontalOrientation) {
+            return result;
+        } else {
+            return !result;
+        }
+
     }
 
-    private boolean dragContainer(RelativeLayout.LayoutParams layoutParams, float lastTouchX) {
+    private boolean dragContainer(RelativeLayout.LayoutParams layoutParams, float lastTouchXY) {
+        int newEndMargin;
         if (isDraggable) {
-            mDistanceX = mPrevRawX - lastTouchX;
+            mDistanceX = mPrevRawX - lastTouchXY;
+            mDistanceY = -(mPrevRawY - lastTouchXY);
             if (!overSlopDistance()) {
                 return mConsumeTouch;
             }
-            Log.d(TAG, "onTouchEvent: mDistanceY: " + mDistanceX + " mPrevTouchY: " + mPrevRawY + " lastTouchY: " + lastTouchX);
-            int newEndMargin = (int) (mLastEndMargin + mDistanceX);
+            Log.d(TAG, "onTouchEvent: mDistanceY: " + mDistanceX + " mPrevTouchY: " + mPrevRawY + " lastTouchY: " + lastTouchXY);
+            if (horizontalOrientation) {
+                newEndMargin = (int) (mLastEndMargin + mDistanceX);
+            } else {
+                newEndMargin = (int) (mLastEndMargin + mDistanceY);
+            }
             if (newEndMargin >= mEndMarginLimit && newEndMargin <= sUPPER_MARGIN_LIMIT) {
-                layoutParams.rightMargin = newEndMargin;
+                if (horizontalOrientation) {
+                    layoutParams.rightMargin = newEndMargin;
+                } else {
+                    layoutParams.topMargin = newEndMargin;
+                }
                 requestLayout();
             } else {
                 Log.d(TAG, "dragContainer: out of limit, should set minimum or maximum margin");
@@ -187,13 +214,22 @@ public class DraggableFrameLayout extends FrameLayout {
     }
 
     public boolean initMarginAnimator(final RelativeLayout.LayoutParams layoutParams, int to) {
-        mMarginAnimator = ValueAnimator.ofInt(layoutParams.rightMargin, to);
+        if (horizontalOrientation) {
+            mMarginAnimator = ValueAnimator.ofInt(layoutParams.rightMargin, to);
+        } else {
+            mMarginAnimator = ValueAnimator.ofInt(layoutParams.topMargin, to);
+        }
+
         mMarginAnimator.setDuration(sMARGIN_ANIM_DURATION);
         mMarginAnimator.setInterpolator(new DecelerateInterpolator());
         mMarginAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                layoutParams.rightMargin = (int) (Integer) valueAnimator.getAnimatedValue();
+                if (horizontalOrientation) {
+                    layoutParams.rightMargin = (int) (Integer) valueAnimator.getAnimatedValue();
+                } else {
+                    layoutParams.topMargin = (int) (Integer) valueAnimator.getAnimatedValue();
+                }
                 requestLayout();
             }
         });
@@ -215,8 +251,13 @@ public class DraggableFrameLayout extends FrameLayout {
     }
 
     private void animateOnActionUp(RelativeLayout.LayoutParams layoutParams) {
+        int marginToAnimate;
         if (isDraggable) {
-            int marginToAnimate = getClosestMargin(layoutParams.rightMargin);
+            if (horizontalOrientation) {
+                marginToAnimate = getClosestMargin(layoutParams.rightMargin);
+            } else {
+                marginToAnimate = getClosestMargin(layoutParams.topMargin);
+            }
             initMarginAnimator(layoutParams, marginToAnimate);
         }
     }
@@ -241,22 +282,31 @@ public class DraggableFrameLayout extends FrameLayout {
     }
 
     private boolean overSlopDistance() {
-        return mTouchSlop < Math.abs(mDistanceX);
+        if (horizontalOrientation)
+            return mTouchSlop < Math.abs(mDistanceX);
+        else return mTouchSlop < Math.abs(mDistanceY);
     }
 
     private void init(Context context) {
-        mContext = context;
         ViewConfiguration vc = ViewConfiguration.get(context);
         mTouchSlop = vc.getScaledTouchSlop();
-        mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
+        int mMinFlingVelocity = vc.getScaledMinimumFlingVelocity();
         Log.d(TAG, "init: mTouchSlop: " + mTouchSlop + " mMinFling: " + mMinFlingVelocity);
+        horizontalOrientation = viewOrientation.equals(ORIENTATION_HORIZONTAL);
 
 
     }
 
     public void setViewOrientation(String orientation) {
-        viewOrientation = orientation;
+
+        if (orientation.equals(ORIENTATION_HORIZONTAL) || orientation.equals(ORIENTATION_VERTICAL)) {
+            viewOrientation = orientation;
+        } else {
+            throw new IllegalArgumentException(ORIENTATION_WRONG_VALUE_WARN);
+
+        }
     }
+
 
     public String getViewOrientation() {
         return viewOrientation;
